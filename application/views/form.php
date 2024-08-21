@@ -11,7 +11,8 @@
         <div class="container mt-5">
             <div class="row">
                 <div class="col-lg-9">
-                    <h1 class="bg-warning rounded text-white p-2">Data Table</h1> 
+                    <h1 class="bg-warning rounded text-white p-2">Data Table</h1>
+                    <div id="message" class="message bg-danger rounded text-white text-center"></div> 
                     <table class="table">
                         <thead>
                             <tr>
@@ -81,7 +82,7 @@
         });
 
         function getAllData(){
-            
+                     
             $.ajax({
                 type: "get",
                 url: "form/fetchAllData",
@@ -102,10 +103,31 @@
                                 <td><img src="'+baseUrl+value['profile']+'" class="w-50 h-50"/></td>\
                                 <td>\
                                     <button onclick="getdata('+value['id']+')" class="btn btn-sm btn-success" id="edit">Edit</button>\
-                                    <button onclick="deldata('+value['id']+')" class="btn btn-sm btn-danger id="delete">Delete</button>\
+                                    <button onclick="return delData('+value['id']+')" class="btn btn-sm btn-danger id="delete">Delete</button>\
                                 </td>\
                             </tr>');
                     });
+                }
+            });
+        }       
+
+
+
+        function delData(id){
+            alert(id);
+                     
+            $.ajax({
+                type: "post",
+                url: "form/deleteData",
+                data: {id: id},
+                dataType: "JSON",
+                success: function(response){
+
+                    var result = JSON.parse(response);
+
+                    if(result.status=='success')
+                        $("#message").html(result.message);	
+
                 }
             });
         }       
@@ -118,42 +140,42 @@
 
                 e.preventDefault();    
 
-                // if($("input[name='name']").val()==''){
-                //     alert("Name field is empty");
-                //     $("input[name='name']").focus();
-                //     e.preventDefault();
-                //     return false;
-                // }
-                // if($("input[name='email']").val()==''){
-                //     alert("Email field is empty");
-                //     $("input[name='email']").focus();
-                //     e.preventDefault();
-                //     return false;
-                // }
-                // if($("input[name='mobile']").val()==''){
-                //     alert("Mobile field is empty");
-                //     $("input[name='mobile']").focus();
-                //     e.preventDefault();
-                //     return false;
-                // }
-                // if($("input[name='dob']").val()==''){
-                //     alert("DOB field is empty");
-                //     $("input[name='dob']").focus();
-                //     e.preventDefault();
-                //     return false;
-                // }
-                // if($("select[name='gender']").val()==''){
-                //     alert("Gender field is empty");
-                //     $("select[name='gender']").focus();
-                //     e.preventDefault();
-                //     return false;
-                // }
-                // if($("input[name='profile']").val()==''){
-                //     alert("Profile Image not uploaded");
-                //     $("input[name='profile']").focus();
-                //     e.preventDefault();
-                //     return false;
-                // }
+                if($("input[name='name']").val()==''){
+                    alert("Name field is empty");
+                    $("input[name='name']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("input[name='email']").val()==''){
+                    alert("Email field is empty");
+                    $("input[name='email']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("input[name='mobile']").val()==''){
+                    alert("Mobile field is empty");
+                    $("input[name='mobile']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("input[name='dob']").val()==''){
+                    alert("DOB field is empty");
+                    $("input[name='dob']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("select[name='gender']").val()==''){
+                    alert("Gender field is empty");
+                    $("select[name='gender']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("input[name='profile']").val()==''){
+                    alert("Profile Image not uploaded");
+                    $("input[name='profile']").focus();
+                    e.preventDefault();
+                    return false;
+                }
 
                 $.ajax({
                     url: "form/submission",

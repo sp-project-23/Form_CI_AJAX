@@ -26,6 +26,25 @@
 
         }
 
+        public function deleteData()
+        {
+            $id = $_REQUEST['id'];
+
+            // $profile = $_REQUEST['profile'];
+
+            $result = $this->Data_model->deleteDataById($id);
+
+            if($result){
+                $response = array(
+                    'status' => "success",
+                    'message' => "Data deleted successfully"
+                );
+            }
+            
+            echo json_encode($response);
+
+        }
+
         public function submission()
         {
             $this->load->helper(array('form','url'));
