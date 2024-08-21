@@ -31,7 +31,7 @@
                 $this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|is_unique[test_table.mobile]');
                 $this->form_validation->set_rules('dob', 'DOB', 'required');
                 $this->form_validation->set_rules('gender', 'Gender', 'required');
-                // $this->form_validation->set_rules('profile', 'Profile', 'required');
+                // $this->form_validation->set_rulkes('profile', 'Profile', 'required');
                 
                 // $response = array('status'=>'FAILED','message'=>'Something went wrong! Try again later.');
 
@@ -94,25 +94,27 @@
         
                     if($result == true)
                     {
-                        // $response = array(
-                        //     'status' => "success",
-                        //     'message' => "Data added successfully"
-                        // );
-                        echo '<p class="bg-success text-white rounded p-1">'."Data added successfully".'</p>';
+                        $response = array(
+                            'status' => "success",
+                            'message' => "Data added successfully"
+                        );
+                       
+                        // echo '<p class="bg-success text-white rounded p-1">'."Data added successfully".'</p>';
                     }
                     
                 }
 
                 else {    
-                    // $response = array(
-                    //     'status' => "error",
-                    //     'message' => validation_errors()
-                    // );
-                    echo '<div class="bg-danger text-white rounded p-1">'.validation_errors().'</div>';
+                    $response = array(
+                        'status' => "error",
+                        'message' => validation_errors()
+                    );
+                    // echo '<div class="bg-danger text-white rounded p-1">'.validation_errors().'</div>';
                 
                 }
 
-                // json_encode($response);
+                // echo $response;
+                echo json_encode($response);
                 // exit();
 
             }

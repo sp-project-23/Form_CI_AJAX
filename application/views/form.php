@@ -10,7 +10,7 @@
 
         <div class="container w-25 mt-5">
             <h1 class="bg-warning rounded text-white p-2">Form</h1>
-            <div id="message" class="text-center"></div>
+            <div id="message" class="message" class="text-center"></div>
             <form method="post" action="form/submission" class="form" id="form" enctype="multipart/form-data">
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" class="form-control">
@@ -105,8 +105,12 @@
         				$('#dob').val('');
                         $('#gender').val('');
                         $('#profile').val('');
-        				// alert(response);
+                        // alert(response);
+        				// alert(response['message']);
+                        // if(response.status_code='201')
                         $("#message").html(response);	
+                        // alert(json_decode(response));
+                        
                     },
                     error: function(response) {
                         console.log(response.status + ':' + response.message);
