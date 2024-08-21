@@ -13,4 +13,9 @@
             return $this->db->insert_id();
 
         }
+
+        public function getAllData()
+        {
+            return $this->db->get('test_table')->result();
+        }
     }

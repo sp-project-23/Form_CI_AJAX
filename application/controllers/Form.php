@@ -18,6 +18,14 @@
             $this->load->view('form');
         }
 
+        public function fetchAllData()
+        {
+            $data = $this->Data_model->getAllData();
+            
+            echo json_encode($data);
+
+        }
+
         public function submission()
         {
             $this->load->helper(array('form','url'));
