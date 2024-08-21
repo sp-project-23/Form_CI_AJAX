@@ -99,7 +99,7 @@
 
             $this->output->set_content_type('application/json')->set_output(json_encode($response));
 
-            header("location: http://localhost/form_submission_ci_ajax/");
+            header("location: http://localhost/Form_CI_AJAX/");
         }
 
     }
