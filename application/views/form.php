@@ -9,10 +9,9 @@
     <body>
 
         <div class="container w-25 mt-5">
-            <h3>Form</h3>
-            <div id="message"></div>
-            <?php //echo validation_errors(); ?>
-            <form method="post" action="form/submission" enctype="multipart/form-data">
+            <h1 class="bg-warning rounded text-white p-2">Form</h1>
+            <div id="message" class="text-center"></div>
+            <form method="post" action="form/submission" class="form" id="form" enctype="multipart/form-data">
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" class="form-control">
 
@@ -20,7 +19,7 @@
                 <input type="email" name="email" id="email" class="form-control">
 
                 <label for="mobile">Mobile</label>
-                <input type="number" name="mobile" id="mobile" class="form-control">
+                <input type="text" name="mobile" id="mobile" pattern="^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$" maxlength="10" class="form-control">
 
                 <label for="dob">DOB</label>
                 <input type="date" name="dob" id="dob" class="form-control">
@@ -34,163 +33,120 @@
                     <?php } ?>
                 </select> 
 
-                <label for="profile"></label>
-                <input type="file" name="profile" id="profile" class="form-control">
+                <label for="profile">Profile Image</label>
+                <input type="file" name="profile" id="profile" accept="image/*" class="form-control">
 
                 <br>
-                <input type="submit" value="Submit" id="submit" class="btn btn-success">
+                <div class="text-center">
+                    <input type="submit" value="Submit" id="submit" class="btn btn-success">
+                </div>
             </form>
         </div>
 
     </body>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#form").on('submit',(function(e) {
+
+                e.preventDefault();    
+
+                if($("input[name='name']").val()==''){
+                    alert("Name field is empty");
+                    $("input[name='name']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("input[name='email']").val()==''){
+                    alert("Email field is empty");
+                    $("input[name='email']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("input[name='mobile']").val()==''){
+                    alert("Mobile field is empty");
+                    $("input[name='mobile']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("input[name='dob']").val()==''){
+                    alert("DOB field is empty");
+                    $("input[name='dob']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("select[name='gender']").val()==''){
+                    alert("Gender field is empty");
+                    $("select[name='gender']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("input[name='profile']").val()==''){
+                    alert("Profile Image not uploaded");
+                    $("input[name='profile']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+
+                $.ajax({
+                    url: "form/submission",
+                    type: "POST",
+                    data:  new FormData(this),
+                    contentType: false,       		
+                    cache: false,					
+                    processData:false,  
+                    success: function(response) {
+                        $('#name').val('');
+        				$('#email').val('');
+        				$('#mobile').val('');
+        				$('#dob').val('');
+                        $('#gender').val('');
+                        $('#profile').val('');
+        				// alert(response);
+                        $("#message").html(response);	
+                    },
+                    error: function(response) {
+                        console.log(response.status + ':' + response.message);
+                    }
+                });         
+
+            }));
+        });
+
+
+
+        // $(document).ready(function(){
+        //     $('form.form').on('submit', function(form){
+        //         form.preventDefault();
+        //         console.log($(this).serializeArray());
+        //         $.post('./form/submission', $(this).serializeArray(), function(data){
+        //             $('div.message').html(data);
+        //         });
+        //     });
+        // });
+
+        // $("form").submit(function (event) {
+                
+        //     var formData = new FormData($(this));
+        
+        //     $.ajax({
+        //             url: url,
+        //             type: 'POST',
+        //             data: formData,
+        //             async: false,
+        //             success: function (data) {
+        //                 //success callback
+        //             },
+        //             cache: false,
+        //             contentType: false,
+        //             processData: false
+        //             });
+        
+        //     });
+    
+    </script>
+
 </html>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<!-- <script src="jslibs/jquery.js" type="text/javascript"></script> -->
-<!-- <script src="jslibs/ajaxupload-min.js" type="text/javascript"></script> -->
-
-<script>
-  
-    // $('#submit').click(function(e){
-    //     e.preventDefault();
-    //     var name = $('#name').val();
-    //     var email = $('#email').val();
-    //     var mobile = $('#mobile').val();
-    //     var dob = $('#dob').val();
-    //     var gender = $('#gender').val();
-    //     // var s = $('#profile').val();
-    //     // s = s.replace(/\\/g, '/');
-    //     // s = s.substring(s.lastIndexOf('/')+ 1);
-    //     // profile = s.substring(s.lastIndexOf('/')+ 1);
-
-    //     if($("input[name='name']").val()==''){
-    //         alert("Name field is empty");
-    //         $("input[name='name']").focus();
-    //         e.preventDefault();
-    //         return false;
-    //     }
-    //     if($("input[name='email']").val()==''){
-    //         alert("Email field is empty");
-    //         $("input[name='email']").focus();
-    //         e.preventDefault();
-    //         return false;
-    //     }
-    //     if($("input[name='mobile']").val()==''){
-    //         alert("Mobile field is empty");
-    //         $("input[name='mobile']").focus();
-    //         e.preventDefault();
-    //         return false;
-    //     }
-    //     if($("input[name='dob']").val()==''){
-    //         alert("DOB field is empty");
-    //         $("input[name='dob']").focus();
-    //         e.preventDefault();
-    //         return false;
-    //     }
-    //     if($("select[name='gender']").val()==''){
-    //         alert("Gender field is empty");
-    //         $("select[name='gender']").focus();
-    //         e.preventDefault();
-    //         return false;
-    //     }
-
-    //     var form_data = new FormData();
-    //     var files = $('#profile')[0].files[0];
-    //     form_data.append("profile", files);
-    //     console.log(files);
-
-    //     $.ajax({
-    //         url: "./form/submission",
-    //         method: "post",
-    //         // data: { 'name' : name, 'email' : email, 'mobile' : mobile, 'dob' : dob, 'gender' : gender, 'profile' : profile},
-    //         data: form_data,
-    //         // dataType: "html",
-    //         contentType: false,
-    //         processData: false,
-    //         success: function (response) {
-    //             alert('Data Added');
-    //             // $('#form')[0].reset();
-    //             if(response.status == 'success') {
-    //                 window.location.reload();
-    //             }
-    //             $("#message").html(response.message);
-    //         }
-    //     });
-    // }) 
-</script>
-
-
-<script>
-     $('#submit').click(function(e){
-        var name = $('#name').val();
-        var email = $('#email').val();
-        var mobile = $('#mobile').val();
-        var dob = $('#dob').val();
-        var gender = $('#gender').val();
-
-        if($("input[name='name']").val()==''){
-            alert("Name field is empty");
-            $("input[name='name']").focus();
-            e.preventDefault();
-            return false;
-        }
-        if($("input[name='email']").val()==''){
-            alert("Email field is empty");
-            $("input[name='email']").focus();
-            e.preventDefault();
-            return false;
-        }
-        if($("input[name='mobile']").val()==''){
-            alert("Mobile field is empty");
-            $("input[name='mobile']").focus();
-            e.preventDefault();
-            return false;
-        }
-        if($("input[name='dob']").val()==''){
-            alert("DOB field is empty");
-            $("input[name='dob']").focus();
-            e.preventDefault();
-            return false;
-        }
-        if($("select[name='gender']").val()==''){
-            alert("Gender field is empty");
-            $("select[name='gender']").focus();
-            e.preventDefault();
-            return false;
-        }
-    });
-
-
-    $(document).ready(function (e) {
-        $("#form").on('submit',(function(e) {
-            e.preventDefault();    
-
-            $.ajax({
-                url: "./form/submission",
-                type: "POST",
-                data:  new FormData(this),
-                contentType: false,
-                        cache: false,
-                processData:false,
-                success: function(data)
-                {
-                    if(data=='invalid')
-                    {
-                        $("#err").html("Invalid File !").fadeIn();
-                    }
-                    else
-                    {
-                        alert('Data added successfully');
-                        // view uploaded file.
-                        $("#preview").html(data).fadeIn();
-                        $("#form")[0].reset(); 
-                    }
-                },
-                error: function(e) 
-                    {
-                        $("#err").html(e).fadeIn();
-                    }          
-            });
-        }));
-    });
-</script>
