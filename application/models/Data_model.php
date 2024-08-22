@@ -5,7 +5,7 @@
     class Data_model extends CI_Model
     {
 
-        public function addData($data)
+        public function addData($data=NULL)
         {
 
             $this->db->insert('test_table', $data);
@@ -14,20 +14,18 @@
 
         }
 
-        public function deleteDataById($id)
+        public function deleteDataById($id=NUL)
         {
-            // echo $id;
+            $profile_image = $this->db->select()->where('id', $id)->get('test_table')->row_array();
+            $file = './uploads/'.$profile_image['profile'];				    
+            unlink($file);
+     
+            return $this->db->where('id', $id)->delete('test_table');
 
-            $profile_image = $this->db->select('profile')->where('id', $id)->get('test_table')->row_array();
-
-            // $f = unlink(base_url()."uploads/".$profile_image['profile']);
-            
-            // if($f) 
-                return $this->db->where('id', $id)->delete('test_table')->result();
         }
 
         public function getAllData()
         {
-            return $this->db->get('test_table')->result();
+            return $this->db->order_by('id', 'desc')->get('test_table')->result_array();
         }
     }

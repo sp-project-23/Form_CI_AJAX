@@ -4,6 +4,11 @@
         <meta charset="UTF-8">
         <title>Form</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" type="text/css"> -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" type="text/javascript"></script>
         
     </head>
     <body>
@@ -12,30 +17,38 @@
             <div class="row">
                 <div class="col-lg-9">
                     <h1 class="bg-warning rounded text-white p-2">Data Table</h1>
+
                     <div id="message" class="message bg-danger rounded text-white text-center"></div> 
-                    <table class="table">
-                        <thead>
+
+                    <!-- <table class="table" style="vertical-align: middle; text-align: center;">
+                        <thead class="thead-dark">
                             <tr>
-                                <td>#</td>
-                                <td>Name</td>
-                                <td>Email</td>
-                                <td>Mobile</td>
-                                <td>DOB</td>
-                                <td>Gender</td>
-                                <td>Profile</td>
-                                <td>ACTION</td>
+                                <td scope="col">#</td>
+                                <td scope="col">Name</td>
+                                <td scope="col">Email</td>
+                                <td scope="col">Mobile</td>
+                                <td scope="col">DOB</td>
+                                <td scope="col">Gender</td>
+                                <td scope="col">Profile</td>
+                                <td scope="col">Action</td>
                             </tr>
                         </thead>
                         <tbody id="tabledata" class="tabledata">
             
                         </tbody>
-                    </table>
+                    </table> -->
+
+                    <div id="tabledata">
+                
+                    </div>
                 </div>
 
                 <div class="col-lg-3">
                     <h1 class="bg-warning rounded text-white p-2">Form</h1>
+
                     <div id="success" class="success bg-success rounded text-white text-center"></div>
                     <div id="error" class="error bg-danger rounded text-white text-center"></div>
+
                     <form method="post" action="form/submission" class="form" id="form" enctype="multipart/form-data">
                         <label for="name">Name</label>
                         <input type="text" name="name" id="name" class="form-control">
@@ -67,9 +80,30 @@
                         </div>
                     </form>
                 </div>
-            </div>
-           
+            </div>           
         </div>
+
+
+
+        <div class="modal fade" id="deleteModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalCenterTitle">Are You Sure Delete This Record ?</h5>
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                    <!-- </button> -->
+                </div>
+                <div class="modal-body">
+                    <p>If You Click On Delete Button Record Will Be Deleted. We Don't have Backup So Be Carefull.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" id="delete_cancel" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-sm btn-danger" id="delete">Delete Now</button>
+                </div>
+                </div>
+            </div>
+        </div>	
 
     </body>
 
@@ -78,63 +112,37 @@
     <script>
 
         $(document).ready(function () {
-            getAllData();
-        });
 
-        function getAllData(){
-                     
-            $.ajax({
-                type: "get",
-                url: "form/fetchAllData",
-                success: function(response){
+            $('#tabledata').load('form/fetchAllData');
 
-                    var result = JSON.parse(response);
 
-                    var baseUrl = "http://localhost/Form_CI_AJAX/uploads/";
+            var deleteid;
 
-                    $.each(result, function (key, value) { 
-                        $('.tabledata').append('<tr>'+
-                                '<td>'+'#'+'</td>\
-                                <td>'+value['name']+'</td>\
-                                <td>'+value['email']+'</td>\
-                                <td>'+value['mobile']+'</td>\
-                                <td>'+value['dob']+'</td>\
-                                <td>'+value['gender']+'</td>\
-                                <td><img src="'+baseUrl+value['profile']+'" class="w-50 h-50"/></td>\
-                                <td>\
-                                    <button onclick="getdata('+value['id']+')" class="btn btn-sm btn-success" id="edit">Edit</button>\
-                                    <button onclick="return delData('+value['id']+')" class="btn btn-sm btn-danger id="delete">Delete</button>\
-                                </td>\
-                            </tr>');
-                    });
-                }
+            $(document).on("click", "button.deletedata", function(e){
+                deleteid = $(this).data("dataid");    
+            });   
+
+            $('#delete').click(function (){
+                $.ajax({
+                    type: "POST",
+                    url: "form/deleteData",
+                    data: {id : deleteid},
+                    success: function(response){
+
+                        var result = JSON.parse(response);
+
+                        if(result.status == 'success'){
+
+                            // console.log(result.message);  
+                            $("#message").html(result.message);	  
+                            $('#delete_cancel').trigger("click");
+                            $('#tabledata').load('form/fetchAllData');
+
+                        }
+                    }
+                });
             });
-        }       
 
-
-
-        function delData(id){
-            alert(id);
-                     
-            $.ajax({
-                type: "post",
-                url: "form/deleteData",
-                data: {id: id},
-                dataType: "JSON",
-                success: function(response){
-
-                    var result = JSON.parse(response);
-
-                    if(result.status=='success')
-                        $("#message").html(result.message);	
-
-                }
-            });
-        }       
-
-
-
-        $(document).ready(function () {
 
             $("#form").on('submit',(function(e) {
 
@@ -178,7 +186,7 @@
                 }
 
                 $.ajax({
-                    url: "form/submission",
+                    url: "form/insertData",
                     type: "POST",
                     data:  new FormData(this),
                     contentType: false,       		
@@ -194,19 +202,22 @@
         				$('#dob').val('');
                         $('#gender').val('');
                         $('#profile').val('');
-                        // $("#message").html(response);	
-                        if(result.status=='success')
-                            $("#success").html(result.message);	
+
+                        if(result.status=='success'){
+
+                            $("#success").html(result.message);	  
+                            $('#tabledata').load('form/fetchAllData');
+
+                        }
+                           
                         if(result.status=='error')
                             $("#error").html(result.message);	
                         
                     }
-                    // error: function(response) {
-                    //     console.log(response.status + ':' + response.message);
-                    // }
                 });         
 
             }));
+
         });
     
     </script>

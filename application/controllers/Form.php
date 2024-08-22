@@ -20,36 +20,70 @@
 
         public function fetchAllData()
         {
+            if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
+
             $data = $this->Data_model->getAllData();
-            
-            echo json_encode($data);
+
+            ?>
+            <table class="table" style="vertical-align: middle; text-align: center;">
+				  <thead class="thead-dark">
+                    <tr>
+                        <td scope="col">#</td>
+                        <td scope="col">Name</td>
+                        <td scope="col">Email</td>
+                        <td scope="col">Mobile</td>
+                        <td scope="col">DOB</td>
+                        <td scope="col">Gender</td>
+                        <td scope="col">Profile</td>
+                        <td scope="col">Action</td>
+                    </tr>
+				  </thead>
+				  <tbody>
+				  	<?php if($data){ foreach($data as $se_data){ ?>
+					<tr>
+					    <!-- <th scope="row"><?php //echo $counter; $counter++; ?></th> -->
+                        <td><?php echo $se_data['id']; ?></td>
+					  	<td><?php echo $se_data['name']; ?></td>
+					  	<td><?php echo $se_data['email']; ?></td>
+					  	<td><?php echo $se_data['mobile']; ?></td>
+						<td><?php echo $se_data['dob']; ?></td>
+                        <td><?php echo $se_data['gender']; ?></td>
+                        <td><img src="<?php echo base_url().'uploads/'.$se_data['profile']; ?>" class="w-25 h-25"/></td>
+						<td>
+							<button type="button" class="btn btn-sm btn-success">Edit</button>
+							<button type="button" data-dataid="<?php echo $se_data['id']; ?>" data-toggle="modal" data-target="#deleteModalCenter" class="btn btn-sm btn-danger deletedata">Delete</button>
+						</td>
+					</tr>
+					<?php }}else{ echo "<tr><td colspan='9'><h2>No Result Found</h2></td></tr>"; } ?>
+				  </tbody>
+				</table>
+            <?php	
 
         }
 
         public function deleteData()
         {
-            $id = $_REQUEST['id'];
 
-            // $profile = $_REQUEST['profile'];
+            // if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
 
-            $result = $this->Data_model->deleteDataById($id);
+            $id = $this->input->post('id');
 
-            if($result){
-                $response = array(
-                    'status' => "success",
-                    'message' => "Data deleted successfully"
-                );
-            }
+            $this->Data_model->deleteDataById($id);
+
+            $response = array(
+                'status' => "success",
+                'message' => "Data deleted successfully"
+            );            
             
             echo json_encode($response);
 
         }
 
-        public function submission()
+        public function insertData()
         {
             $this->load->helper(array('form','url'));
             $this->load->library('form_validation');
-            // if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
+            if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
 
             if($this->input->method()=='post') {
 
@@ -60,8 +94,6 @@
                 $this->form_validation->set_rules('gender', 'Gender', 'required');
                 // $this->form_validation->set_rulkes('profile', 'Profile', 'required');
                 
-                // $response = array('status'=>'FAILED','message'=>'Something went wrong! Try again later.');
-
                 if ($this->form_validation->run() == true) {
 
                     $fields = ['name', 'email', 'mobile', 'dob', 'gender', 'profile'];
@@ -123,7 +155,7 @@
                     {
                         $response = array(
                             'status' => "success",
-                            'message' => "Data added successfully"
+                            'message' => "Data inserted successfully"
                         );
                        
                         // echo '<p class="bg-success text-white rounded p-1">'."Data added successfully".'</p>';
