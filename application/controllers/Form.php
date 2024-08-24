@@ -132,9 +132,6 @@
                 $data['profile'] = $img['file_name']; 
 
 
-                // if(!$img['file_name'])
-				//     $data['profile'] = $oldImg;
-
                 if($img['file_name']=='')
 				    $data['profile'] = $oldImg;
 

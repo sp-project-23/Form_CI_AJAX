@@ -212,7 +212,6 @@
                     url: "form/updateData",
                     type: "POST",
                     data:  new FormData(this),
-                    // dataType: "JSON",
                     contentType: false,       		
                     cache: false,					
                     processData:false,  
@@ -232,7 +231,6 @@
                 });         
 
             }));
-
            
 
     
@@ -255,7 +253,6 @@
 
                         if(result.status == 'success'){
 
-                            // console.log(result.message); 
                             $("#message").html(result.message);	  
                             $('#delete_cancel').trigger("click");
                             $('#tabledata').load('form/fetchAllData');
@@ -332,8 +329,8 @@
 
                         }
                            
-                        if(result.status=='error')
-                            $("#error").html(result.message);	
+                        // if(result.status=='error')
+                        //     $("#error").html(result.message);	
                         
                     }
                 });         
