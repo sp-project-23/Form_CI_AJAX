@@ -16,7 +16,6 @@
 
         public function updateDataById($id, $data)
         {
-            // return $this->db->set('name', $data['name'])->set('email', $data['email'])->set('mobile', $data['mobile'])->set('dob', $data['dob'])->set('gender', $data['gender'])->where('id', $id)->update('test_table');
             return $this->db->where('id', $id)->update('test_table', $data);
         }
 
