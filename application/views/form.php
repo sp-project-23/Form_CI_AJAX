@@ -3,12 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <title>Form</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" type="text/javascript"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-        <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" type="text/javascript"></script> -->
-        
+        <link href="<?php echo base_url().'assets/css/bootstrap.min.css'; ?>" rel="stylesheet">
+        <script src="<?php echo base_url().'assets/js/ajax.popper.min.js'; ?>"></script>
+        <script src="<?php echo base_url().'assets/js/jquery.min.js'; ?>"></script>
+        <script src="<?php echo base_url().'assets/js/bootstrap.min.js'; ?>"></script>
     </head>
     <body>
 
@@ -33,13 +31,13 @@
 
                     <form method="post" action="form/submission" class="form" id="form" enctype="multipart/form-data">
                         <label for="name">Name</label>
-                        <input type="text" name="name" id="name" class="form-control">
+                        <input type="text" name="name" id="name" class="form-control" onKeyPress="return validateAlpha(event);">
 
                         <label for="email">Email</label>
                         <input type="email" name="email" id="email" class="form-control">
 
                         <label for="mobile">Mobile</label>
-                        <input type="text" name="mobile" id="mobile"]lg maxlength="10" class="form-control">
+                        <input type="text" name="mobile" id="mobile" maxlength="10" class="form-control" onKeyPress="return validateNumber(event);">
 
                         <label for="dob">DOB</label>
                         <input type="date" name="dob" id="dob" class="form-control">
@@ -143,11 +141,34 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
     <script>
+        
+        function validateAlpha(evt) {
 
-        $(document).ready(function () {
+            var keyCode = (evt.which) ? evt.which : evt.keyCode
+            if ((keyCode < 65 || keyCode > 90) && (keyCode < 97 || keyCode > 123) && keyCode != 32)            
+                return false;
+            return true;
+        }
+
+        function validateNumber(evt){  
+
+            var charCode = (evt.which) ? evt.which : evt.keyCode
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+
+        $('input[type=email]').on('keypress', function (e) {
+            var re = /[A-Z0-9a-z@\._]/.test(e.key);
+            if (!re) {
+                return false;
+            }
+        });
+
+
+        $(document).ready(function () {  
 
             $('#tabledata').load('form/fetchAllData');
-
 
             $(document).on("click", "button.editdata", function(){
 
