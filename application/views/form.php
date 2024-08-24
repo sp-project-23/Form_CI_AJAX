@@ -19,6 +19,7 @@
                     <h1 class="bg-warning rounded text-white p-2">Data Table</h1>
 
                     <div id="message" class="message bg-danger rounded text-white text-center"></div> 
+                    <div id="update" class="update bg-success rounded text-white text-center"></div> 
 
                     <!-- <table class="table" style="vertical-align: middle; text-align: center;">
                         <thead class="thead-dark">
@@ -90,9 +91,6 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalCenterTitle">Are You Sure Delete This Record ?</h5>
-                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
-                    <!-- <span aria-hidden="true">&times;</span> -->
-                    <!-- </button> -->
                 </div>
                 <div class="modal-body">
                     <p>If You Click On Delete Button Record Will Be Deleted. We Don't have Backup So Be Carefull.</p>
@@ -105,6 +103,60 @@
             </div>
         </div>	
 
+
+        <div class="modal fade" id="updateModalCenter" tabindex="-1" role="dialog" aria-labelledby="updateModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateModalCenterTitle">Edit & Update</h5>
+                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+                        <!-- <span aria-hidden="true">&times;</span> -->
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="form/updateData" role="form" id="updateForm" class="updateForm" enctype="multipart/form-data">
+
+                            <input type="hidden" name="edit_id" id="edit_id" value="">
+
+                            <label for="edit_name">Name</label>
+                            <input type="text" name="edit_name" id="edit_name" class="form-control">
+
+                            <label for="edit_email">Email</label>
+                            <input type="email" name="edit_email" id="edit_email" class="form-control">
+
+                            <label for="edit_mobile">Mobile</label>
+                            <input type="text" name="edit_mobile" id="edit_mobile" maxlength="10" class="form-control">
+
+                            <label for="edit_dob">DOB</label>
+                            <input type="date" name="edit_dob" id="edit_dob" class="form-control">
+                            
+                            <label for="edit_gender">Gender</label>
+                            <select name="edit_gender" id="edit_gender" class="form-control">
+                            <option value="">(select gender)</option>
+                            <?php $genders = [1 => 'Male', 2 => 'Female', 3 => 'Other']; 
+                                foreach ($genders as $key => $row) {?>
+                                    <option value="<?php echo $key; ?>"><?php echo $row; ?></option>
+                                <?php } ?>
+                            </select> 
+
+                            <label for="edit_profile">Profile Image</label>
+                            <input type="file" name="edit_profile" id="edit_profile" accept="image/*" class="form-control">
+                            <img src="" id="profile_image" class="w-25 h-25 mt-2">
+
+                            <!-- <div class="text-center">
+                                <input type="submit" value="Submit" id="submit" class="btn btn-success">
+                            </div> -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary" id="update_cancel" data-dismiss="modal">Cancel</button>
+                                <input type="submit" class="btn btn-sm btn-success" id="update" value="Update">
+                            </div>
+                        </form>
+                    </div>                
+                </div>
+            </div>
+        </div>	
+
+
     </body>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -115,6 +167,76 @@
 
             $('#tabledata').load('form/fetchAllData');
 
+
+            $(document).on("click", "button.editdata", function(){
+
+                var edit_id = $(this).data('dataid');
+
+                var baseUrl = '<?php echo base_url(); ?>'+'uploads/';
+
+                $.ajax({
+                    type: "POST",
+                    url: "form/editData",
+                    data: {id : edit_id},
+                    success: function(response){
+
+                        var result = JSON.parse(response);
+
+                        if(result.status == 'success'){
+
+                            $('#edit_id').val(result.id);
+                            $('#edit_name').val(result.name);
+                            $('#edit_email').val(result.email);
+                            $('#edit_mobile').val(result.mobile);
+                            $('#edit_dob').val(result.dob);
+                            $('#edit_gender').val(result.gender);
+                            $('#profile_image').attr("src", baseUrl+result.profile);
+
+                            $('#update').attr("data-id", edit_id);
+
+                        }
+
+                    }
+                    
+                });
+            });
+
+  
+                
+
+            $("#updateForm").on('submit',(function(e) {
+
+                e.preventDefault();    
+
+                $.ajax({
+                    url: "form/updateData",
+                    type: "POST",
+                    data:  new FormData(this),
+                    // dataType: "JSON",
+                    contentType: false,       		
+                    cache: false,					
+                    processData:false,  
+                    success: function(response) {
+
+                        var result = JSON.parse(response);
+                
+                        if(result.status=='success'){
+
+                            $('#update_cancel').trigger("click");
+                            $("#update").html(result.message);	                             
+                            $('#tabledata').load('form/fetchAllData');
+
+                        }
+                        
+                    }
+                });         
+
+            }));
+
+           
+
+    
+           
 
             var deleteid;
 
@@ -133,7 +255,7 @@
 
                         if(result.status == 'success'){
 
-                            // console.log(result.message);  
+                            // console.log(result.message); 
                             $("#message").html(result.message);	  
                             $('#delete_cancel').trigger("click");
                             $('#tabledata').load('form/fetchAllData');

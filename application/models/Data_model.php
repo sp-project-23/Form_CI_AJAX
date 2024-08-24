@@ -14,7 +14,18 @@
 
         }
 
-        public function deleteDataById($id=NUL)
+        public function updateDataById($id, $data)
+        {
+            // return $this->db->set('name', $data['name'])->set('email', $data['email'])->set('mobile', $data['mobile'])->set('dob', $data['dob'])->set('gender', $data['gender'])->where('id', $id)->update('test_table');
+            return $this->db->where('id', $id)->update('test_table', $data);
+        }
+
+        public function getDataById($id=NULL)
+        {
+            return $this->db->where('id', $id)->get('test_table')->row_array();
+        }
+
+        public function deleteDataById($id=NULL)
         {
             $profile_image = $this->db->select()->where('id', $id)->get('test_table')->row_array();
             $file = './uploads/'.$profile_image['profile'];				    

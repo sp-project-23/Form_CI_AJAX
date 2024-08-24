@@ -50,7 +50,7 @@
                         <td><?php echo $se_data['gender']; ?></td>
                         <td><img src="<?php echo base_url().'uploads/'.$se_data['profile']; ?>" class="w-25 h-25"/></td>
 						<td>
-							<button type="button" class="btn btn-sm btn-success">Edit</button>
+							<button type="button" data-dataid="<?php echo $se_data['id']; ?>" data-toggle="modal" data-target="#updateModalCenter" class="btn btn-sm btn-success editdata">Edit</button>
 							<button type="button" data-dataid="<?php echo $se_data['id']; ?>" data-toggle="modal" data-target="#deleteModalCenter" class="btn btn-sm btn-danger deletedata">Delete</button>
 						</td>
 					</tr>
@@ -58,6 +58,106 @@
 				  </tbody>
 				</table>
             <?php	
+
+        }
+
+        public function editData()
+        {
+
+            // if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
+
+            $id = $this->input->post('id');
+
+            $data = $this->Data_model->getDataById($id);
+
+            $response = array(
+                'status' => "success",
+                'id' => $data['id'],
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'mobile' => $data['mobile'],
+                'dob' => $data['dob'],
+                'gender' => $data['gender']=='Male'?'1':($data['gender']=='Female'?'2':'3'),
+                'profile' => $data['profile']
+            );
+            
+            echo json_encode($response);
+
+        }
+
+        public function updateData()
+        {
+
+            $this->load->helper(array('form','url'));
+
+            // if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
+            
+            if($this->input->method()=='post') {       
+
+                $this->form_validation->set_rules('name', 'Name', 'required|trim');
+                $this->form_validation->set_rules('email', 'Email', 'required|trim|is_unique[test_table.email]');
+                $this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|is_unique[test_table.mobile]');
+                $this->form_validation->set_rules('dob', 'DOB', 'required');
+                $this->form_validation->set_rules('gender', 'Gender', 'required');
+
+                $fields = ['name', 'email', 'mobile', 'dob', 'gender', 'profile'];
+
+                $data = [];
+
+                $id = $this->input->post('edit_id');
+
+                $oldData = $this->Data_model->getDataById($id);
+
+                $oldImg = $oldData['profile'];
+
+                foreach ($fields as $field){
+
+                    $data[$field] = $this->input->post('edit_'.$field);
+                    if($field == 'gender')
+                        $data[$field] = $this->input->post('edit_'.$field)=='1'?'Male':($this->input->post('edit_'.$field)=='2'?'Female':'Other');
+                
+                }
+
+                $config['upload_path'] = './uploads/';
+                $config['allowed_types'] = 'gif|jpg|png';
+
+                $this->load->library('upload',$config);	
+
+                $this->upload->initialize($config);
+
+                $this->upload->do_upload('edit_profile');
+
+                $img = $this->upload->data();
+
+                $data['profile'] = $img['file_name']; 
+
+
+                // if(!$img['file_name'])
+				//     $data['profile'] = $oldImg;
+
+                if($img['file_name']=='')
+				    $data['profile'] = $oldImg;
+
+                if($img['file_name']!='' && $img['file_name']!=$oldImg){
+
+                    $data['profile'] = $img['file_name'];
+                    $file = './uploads/'.$oldImg;		
+                    unlink($file);
+                }	
+
+                // print_r($data);
+                // die;
+
+                if( $this->Data_model->updateDataById($id, $data) == true ){
+                    $response = array(
+                        'status' => "success",
+                        'message' => "Data updated successfully"
+                    );  
+                }
+                 
+            }         
+            
+            echo json_encode($response);
 
         }
 
