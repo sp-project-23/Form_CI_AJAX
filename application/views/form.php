@@ -5,7 +5,6 @@
         <title>Form</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-        <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" type="text/css"> -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" type="text/javascript"></script>
@@ -20,24 +19,6 @@
 
                     <div id="message" class="message bg-danger rounded text-white text-center"></div> 
                     <div id="update" class="update bg-success rounded text-white text-center"></div> 
-
-                    <!-- <table class="table" style="vertical-align: middle; text-align: center;">
-                        <thead class="thead-dark">
-                            <tr>
-                                <td scope="col">#</td>
-                                <td scope="col">Name</td>
-                                <td scope="col">Email</td>
-                                <td scope="col">Mobile</td>
-                                <td scope="col">DOB</td>
-                                <td scope="col">Gender</td>
-                                <td scope="col">Profile</td>
-                                <td scope="col">Action</td>
-                            </tr>
-                        </thead>
-                        <tbody id="tabledata" class="tabledata">
-            
-                        </tbody>
-                    </table> -->
 
                     <div id="tabledata">
                 
@@ -58,7 +39,7 @@
                         <input type="email" name="email" id="email" class="form-control">
 
                         <label for="mobile">Mobile</label>
-                        <input type="text" name="mobile" id="mobile" pattern="^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$" maxlength="10" class="form-control">
+                        <input type="text" name="mobile" id="mobile"]lg maxlength="10" class="form-control">
 
                         <label for="dob">DOB</label>
                         <input type="date" name="dob" id="dob" class="form-control">
@@ -93,7 +74,7 @@
                     <h5 class="modal-title" id="deleteModalCenterTitle">Are You Sure Delete This Record ?</h5>
                 </div>
                 <div class="modal-body">
-                    <p>If You Click On Delete Button Record Will Be Deleted. We Don't have Backup So Be Carefull.</p>
+                    <p>If You Click On "Delete Now" Button Record Will Be Deleted. We Don't have Backup. So Be Careful.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary" id="delete_cancel" data-dismiss="modal">Cancel</button>
@@ -222,6 +203,8 @@
                         if(result.status=='success'){
 
                             $('#update_cancel').trigger("click");
+                            $("#message").html('');	
+                            $("#success").html('');
                             $("#update").html(result.message);	                             
                             $('#tabledata').load('form/fetchAllData');
 
@@ -254,6 +237,8 @@
                         if(result.status == 'success'){
 
                             $("#message").html(result.message);	  
+                            $("#update").html('');	
+                            $("#success").html('');
                             $('#delete_cancel').trigger("click");
                             $('#tabledata').load('form/fetchAllData');
 
@@ -324,6 +309,8 @@
 
                         if(result.status=='success'){
 
+                            $("#update").html('');	
+                            $("#message").html('');	
                             $("#success").html(result.message);	  
                             $('#tabledata').load('form/fetchAllData');
 
