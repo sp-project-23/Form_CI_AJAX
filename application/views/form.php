@@ -203,6 +203,7 @@
                         if(result.status=='success'){
 
                             $('#update_cancel').trigger("click");
+                            $("#error").html();
                             $("#message").html('');	
                             $("#success").html('');
                             $("#update").html(result.message);	                             
@@ -236,7 +237,8 @@
 
                         if(result.status == 'success'){
 
-                            $("#message").html(result.message);	  
+                            $("#message").html(result.message);	 
+                            $("#error").html(); 
                             $("#update").html('');	
                             $("#success").html('');
                             $('#delete_cancel').trigger("click");
@@ -250,7 +252,9 @@
 
             $("#form").on('submit',(function(e) {
 
-                e.preventDefault();    
+                e.preventDefault();   
+                
+                $("#error").html();	
 
                 if($("input[name='name']").val()==''){
                     alert("Name field is empty");
@@ -300,15 +304,23 @@
 
                         var result = JSON.parse(response);
                    
-                        $('#name').val('');
-        				$('#email').val('');
-        				$('#mobile').val('');
-        				$('#dob').val('');
-                        $('#gender').val('');
-                        $('#profile').val('');
+                        // $('#name').val('');
+        				// $('#email').val('');
+        				// $('#mobile').val('');
+        				// $('#dob').val('');
+                        // $('#gender').val('');
+                        // $('#profile').val('');
 
                         if(result.status=='success'){
 
+                            $('#name').val('');
+                            $('#email').val('');
+                            $('#mobile').val('');
+                            $('#dob').val('');
+                            $('#gender').val('');
+                            $('#profile').val('');
+
+                            $("#error").html();	
                             $("#update").html('');	
                             $("#message").html('');	
                             $("#success").html(result.message);	  
@@ -316,8 +328,11 @@
 
                         }
                            
-                        // if(result.status=='error')
-                        //     $("#error").html(result.message);	
+                        if(result.status=='error'){
+                            $("#success").html();
+                            $("#error").html(result.message);	
+                        }
+                            
                         
                     }
                 });         

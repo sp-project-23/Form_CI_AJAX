@@ -94,11 +94,11 @@
             
             if($this->input->method()=='post') {       
 
-                $this->form_validation->set_rules('name', 'Name', 'required|trim');
-                $this->form_validation->set_rules('email', 'Email', 'required|trim|is_unique[test_table.email]');
-                $this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|is_unique[test_table.mobile]');
-                $this->form_validation->set_rules('dob', 'DOB', 'required');
-                $this->form_validation->set_rules('gender', 'Gender', 'required');
+                $this->form_validation->set_rules('edit_name', 'Name', 'required|trim');
+                $this->form_validation->set_rules('edit_email', 'Email', 'required|trim|is_unique[test_table.email]');
+                $this->form_validation->set_rules('edit_mobile', 'Mobile', 'required|trim|is_unique[test_table.mobile]');
+                $this->form_validation->set_rules('edit_dob', 'DOB', 'required');
+                $this->form_validation->set_rules('edit_gender', 'Gender', 'required');
 
                 $fields = ['name', 'email', 'mobile', 'dob', 'gender', 'profile'];
 
