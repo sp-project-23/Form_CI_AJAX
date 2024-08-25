@@ -25,39 +25,39 @@
             $data = $this->Data_model->getAllData();
 
             ?>
-            <table class="table" style="vertical-align: middle; text-align: center;">
-				  <thead class="thead-dark">
+            <table class="table heading" style="vertical-align: middle; text-align: center;">
+				<thead class="thead-dark">
                     <tr>
-                        <td scope="col">#</td>
-                        <td scope="col">Name</td>
-                        <td scope="col">Email</td>
-                        <td scope="col">Mobile</td>
-                        <td scope="col">DOB</td>
-                        <td scope="col">Gender</td>
-                        <td scope="col">Profile</td>
-                        <td scope="col">Action</td>
+                        <td class="label" scope="col">#</td>
+                        <td class="label" scope="col">Name</td>
+                        <td class="label" scope="col">Email</td>
+                        <td class="label" scope="col">Mobile</td>
+                        <td class="label" scope="col">DOB</td>
+                        <td class="label" scope="col">Gender</td>
+                        <td class="label" scope="col">Profile</td>
+                        <td class="label" scope="col">Action</td>
                     </tr>
-				  </thead>
-				  <tbody>
+				</thead>
+				<tbody>
 				  	<?php if($data){ foreach($data as $se_data){ ?>
 					<tr>
 					    <!-- <th scope="row"><?php //echo $counter; $counter++; ?></th> -->
-                        <td><?php echo $se_data['id']; ?></td>
-					  	<td><?php echo $se_data['name']; ?></td>
-					  	<td><?php echo $se_data['email']; ?></td>
-					  	<td><?php echo $se_data['mobile']; ?></td>
-						<td><?php echo $se_data['dob']; ?></td>
-                        <td><?php echo $se_data['gender']; ?></td>
-                        <td><img src="<?php echo base_url().'uploads/'.$se_data['profile']; ?>" class="w-25 h-25"/></td>
+                        <td class="editfield"><?php echo $se_data['id']; ?></td>
+					  	<td class="editfield"><?php echo $se_data['name']; ?></td>
+					  	<td class="editfield"><?php echo $se_data['email']; ?></td>
+					  	<td class="editfield"><?php echo $se_data['mobile']; ?></td>
+						<td class="editfield"><?php echo $se_data['dob']; ?></td>
+                        <td class="editfield"><?php echo $se_data['gender']; ?></td>
+                        <td><img src="<?php echo base_url().'uploads/'.$se_data['profile']; ?>" class="profile"/></td>
 						<td>
-							<button type="button" data-dataid="<?php echo $se_data['id']; ?>" data-toggle="modal" data-target="#updateModalCenter" class="btn btn-sm btn-success editdata">Edit</button>
-							<button type="button" data-dataid="<?php echo $se_data['id']; ?>" data-toggle="modal" data-target="#deleteModalCenter" class="btn btn-sm btn-danger deletedata">Delete</button>
+							<button type="button" data-dataid="<?php echo $se_data['id']; ?>" data-toggle="modal" data-target="#updateModalCenter" class="butn btn btn-success editdata">Edit</button>
+							<button type="button" data-dataid="<?php echo $se_data['id']; ?>" data-toggle="modal" data-target="#deleteModalCenter" class="butn btn btn-danger deletedata">Delete</button>
 						</td>
 					</tr>
-					<?php }}else{ echo "<tr><td colspan='9'><h2>No Result Found</h2></td></tr>"; } ?>
-				  </tbody>
-				</table>
-            <?php	
+					<?php }}else{ echo "<tr><td colspan='9' class='label'><h2>No Result Found</h2></td></tr>"; } ?>
+				</tbody>
+			</table>
+                    <?php	
 
         }
 

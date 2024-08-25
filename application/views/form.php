@@ -4,16 +4,19 @@
         <meta charset="UTF-8">
         <title>Form</title>
         <link href="<?php echo base_url().'assets/css/bootstrap.min.css'; ?>" rel="stylesheet">
+        <link href="<?php echo base_url().'assets/css/responsive.css'; ?>" rel="stylesheet">
+        
         <script src="<?php echo base_url().'assets/js/ajax.popper.min.js'; ?>"></script>
         <script src="<?php echo base_url().'assets/js/jquery.min.js'; ?>"></script>
         <script src="<?php echo base_url().'assets/js/bootstrap.min.js'; ?>"></script>
+
     </head>
     <body>
 
-        <div class="container mt-5">
+        <div class="container">
             <div class="row">
                 <div class="col-lg-9">
-                    <h1 class="bg-warning rounded text-white p-2">Data Table</h1>
+                    <h1 class="heading bg-warning rounded text-white p-2">Data Table</h1>
 
                     <div id="message" class="message bg-danger rounded text-white text-center"></div> 
                     <div id="update" class="update bg-success rounded text-white text-center"></div> 
@@ -24,39 +27,39 @@
                 </div>
 
                 <div class="col-lg-3">
-                    <h1 class="bg-warning rounded text-white p-2">Form</h1>
+                    <h1 class="heading bg-warning rounded text-white p-2">Form</h1>
 
                     <div id="success" class="success bg-success rounded text-white text-center"></div>
                     <div id="error" class="error bg-danger rounded text-white text-center"></div>
 
                     <form method="post" action="form/submission" class="form" id="form" enctype="multipart/form-data">
-                        <label for="name">Name</label>
-                        <input type="text" name="name" id="name" class="form-control" onKeyPress="return validateAlpha(event);">
+                        <label for="name" class="label">Name</label>
+                        <input type="text" name="name" id="name" class="field form-control" onKeyPress="return validateAlpha(event);">
 
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control">
+                        <label for="email" class="label">Email</label>
+                        <input type="email" name="email" id="email" class="field form-control">
 
-                        <label for="mobile">Mobile</label>
-                        <input type="text" name="mobile" id="mobile" maxlength="10" class="form-control" onKeyPress="return validateNumber(event);">
+                        <label for="mobile" class="label">Mobile</label>
+                        <input type="text" name="mobile" id="mobile" maxlength="10" class="field form-control" onKeyPress="return validateNumber(event);">
 
-                        <label for="dob">DOB</label>
-                        <input type="date" name="dob" id="dob" class="form-control">
+                        <label for="dob" class="label">DOB</label>
+                        <input type="date" name="dob" id="dob" class="field form-control">
                         
-                        <label for="gender">Gender</label>
-                        <select name="gender" id="gender" class="form-control">
-                        <option value="">(select gender)</option>
+                        <label for="gender" class="label">Gender</label>
+                        <select name="gender" id="gender" class="field form-control">
+                        <option value="" class="field form-control">(select gender)</option>
                         <?php $genders = [1 => 'Male', 2 => 'Female', 3 => 'Other']; 
                             foreach ($genders as $key => $row) {?>
-                                <option value="<?php echo $key; ?>"><?php echo $row; ?></option>
+                                <option value="<?php echo $key; ?>" class="field form-control"><?php echo $row; ?></option>
                             <?php } ?>
                         </select> 
 
-                        <label for="profile">Profile Image</label>
-                        <input type="file" name="profile" id="profile" accept="image/*" class="form-control">
+                        <label for="profile" class="label">Profile Image</label>
+                        <input type="file" name="profile" id="profile" accept="image/*" class="field form-control">
 
                         <br>
                         <div class="text-center">
-                            <input type="submit" value="Submit" id="submit" class="btn btn-success">
+                            <input type="submit" value="Submit" id="submit" class="butnsub btn btn-success">
                         </div>
                     </form>
                 </div>
@@ -75,8 +78,8 @@
                     <p>If You Click On "Delete Now" Button Record Will Be Deleted. We Don't have Backup. So Be Careful.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-secondary" id="delete_cancel" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-sm btn-danger" id="delete">Delete Now</button>
+                    <button type="button" class="butn btn btn-secondary" id="delete_cancel" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="butn btn btn-danger" id="delete">Delete Now</button>
                 </div>
                 </div>
             </div>
@@ -86,48 +89,45 @@
         <div class="modal fade" id="updateModalCenter" tabindex="-1" role="dialog" aria-labelledby="updateModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="updateModalCenterTitle">Edit & Update</h5>
-                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
-                        <!-- <span aria-hidden="true">&times;</span> -->
-                        </button>
+                    <div class="modal-header bg-warning">
+                        <h5 class="heading modal-title text-white" id="updateModalCenterTitle">Edit & Update</h5>
                     </div>
                     <div class="modal-body">
                         <form method="post" action="form/updateData" role="form" id="updateForm" class="updateForm" enctype="multipart/form-data">
 
                             <input type="hidden" name="edit_id" id="edit_id" value="">
 
-                            <label for="edit_name">Name</label>
-                            <input type="text" name="edit_name" id="edit_name" class="form-control">
+                            <label for="edit_name" class="label">Name</label>
+                            <input type="text" name="edit_name" id="edit_name" class="editfield form-control">
 
-                            <label for="edit_email">Email</label>
-                            <input type="email" name="edit_email" id="edit_email" class="form-control">
+                            <label for="edit_email" class="label">Email</label>
+                            <input type="email" name="edit_email" id="edit_email" class="editfield form-control">
 
-                            <label for="edit_mobile">Mobile</label>
-                            <input type="text" name="edit_mobile" id="edit_mobile" maxlength="10" class="form-control">
+                            <label for="edit_mobile" class="label">Mobile</label>
+                            <input type="text" name="edit_mobile" id="edit_mobile" maxlength="10" class="editfield form-control">
 
-                            <label for="edit_dob">DOB</label>
-                            <input type="date" name="edit_dob" id="edit_dob" class="form-control">
+                            <label for="edit_dob" class="label">DOB</label>
+                            <input type="date" name="edit_dob" id="edit_dob" class="editfield form-control">
                             
-                            <label for="edit_gender">Gender</label>
-                            <select name="edit_gender" id="edit_gender" class="form-control">
-                            <option value="">(select gender)</option>
+                            <label for="edit_gender" class="label">Gender</label>
+                            <select name="edit_gender" id="edit_gender" class="editfield form-control">
+                            <option value="" class="editfield form-control">(select gender)</option>
                             <?php $genders = [1 => 'Male', 2 => 'Female', 3 => 'Other']; 
                                 foreach ($genders as $key => $row) {?>
-                                    <option value="<?php echo $key; ?>"><?php echo $row; ?></option>
+                                    <option value="<?php echo $key; ?>" class="editfield form-control"><?php echo $row; ?></option>
                                 <?php } ?>
                             </select> 
 
-                            <label for="edit_profile">Profile Image</label>
-                            <input type="file" name="edit_profile" id="edit_profile" accept="image/*" class="form-control">
-                            <img src="" id="profile_image" class="w-25 h-25 mt-2">
+                            <label for="edit_profile" class="label">Profile Image</label>
+                            <input type="file" name="edit_profile" id="edit_profile" accept="image/*" class="editfield form-control">
+                            <img src="" id="profile_image" class="profile mt-2">
 
                             <!-- <div class="text-center">
                                 <input type="submit" value="Submit" id="submit" class="btn btn-success">
                             </div> -->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-secondary" id="update_cancel" data-dismiss="modal">Cancel</button>
-                                <input type="submit" class="btn btn-sm btn-success" id="update" value="Update">
+                                <button type="button" class="butn btn btn-secondary" id="update_cancel" data-dismiss="modal">Cancel</button>
+                                <input type="submit" class="butn btn btn-success" id="update" value="Update">
                             </div>
                         </form>
                     </div>                
@@ -170,6 +170,9 @@
 
             $('#tabledata').load('form/fetchAllData');
 
+
+
+
             $(document).on("click", "button.editdata", function(){
 
                 var edit_id = $(this).data('dataid');
@@ -185,6 +188,10 @@
                         var result = JSON.parse(response);
 
                         if(result.status == 'success'){
+
+                            $("#error").html('');
+                            $("#message").html('');	
+                            $("#success").html('');
 
                             $('#edit_id').val(result.id);
                             $('#edit_name').val(result.name);
@@ -224,7 +231,7 @@
                         if(result.status=='success'){
 
                             $('#update_cancel').trigger("click");
-                            $("#error").html();
+                            $("#error").html('');
                             $("#message").html('');	
                             $("#success").html('');
                             $("#update").html(result.message);	                             
@@ -259,7 +266,7 @@
                         if(result.status == 'success'){
 
                             $("#message").html(result.message);	 
-                            $("#error").html(); 
+                            $("#error").html(''); 
                             $("#update").html('');	
                             $("#success").html('');
                             $('#delete_cancel').trigger("click");
@@ -341,7 +348,7 @@
                             $('#gender').val('');
                             $('#profile').val('');
 
-                            $("#error").html();	
+                            $("#error").html('');	
                             $("#update").html('');	
                             $("#message").html('');	
                             $("#success").html(result.message);	  
@@ -350,7 +357,9 @@
                         }
                            
                         if(result.status=='error'){
-                            $("#success").html();
+                            $("#success").html('');
+                            $("#update").html('');	
+                            $("#message").html('');	
                             $("#error").html(result.message);	
                         }
                             
