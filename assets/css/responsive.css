@@ -10,6 +10,9 @@
     font-size: 16px;
     width: 100%;
 }
+.editerror{
+    font-size: 16px;
+}
 .label{
     font-size: 18px;
 }
@@ -44,6 +47,9 @@
     .message, .update, .success, .error{
         font-size: 25px;
         width: 150%;
+    }
+    .editerror{
+        font-size: 25px;
     }
     .label{
         font-size: 30px;
@@ -81,6 +87,9 @@
     .message, .update, .success, .error{
         font-size: 25px;
         width: 150%;
+    }
+    .editerror{
+        font-size: 25px;
     }
     .label{
         font-size: 30px;

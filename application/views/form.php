@@ -16,7 +16,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-9">
-                    <h1 class="heading bg-warning rounded text-white p-2">Data Table</h1>
+                    <h1 class="heading bg-info rounded text-white p-2">Data Table</h1>
 
                     <div id="message" class="message bg-danger rounded text-white text-center"></div> 
                     <div id="update" class="update bg-success rounded text-white text-center"></div> 
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="col-lg-3">
-                    <h1 class="heading bg-warning rounded text-white p-2">Form</h1>
+                    <h1 class="heading bg-primary rounded text-white p-2">Form</h1>
 
                     <div id="success" class="success bg-success rounded text-white text-center"></div>
                     <div id="error" class="error bg-danger rounded text-white text-center"></div>
@@ -93,20 +93,20 @@
                         <h5 class="heading modal-title text-white" id="updateModalCenterTitle">Edit & Update</h5>
                     </div>
                     <div class="modal-body">
-                            <form method="post" action="form/updateData" role="form" id="updateForm" class="updateForm" enctype="multipart/form-data">
+                        <form method="post" action="form/updateData" role="form" id="updateForm" class="updateForm" enctype="multipart/form-data">
 
                             <input type="hidden" name="edit_id" id="edit_id" value="">
 
                             <div id="editerror" class="editerror bg-danger rounded text-white text-center"></div>
 
                             <label for="edit_name" class="label">Name</label>
-                            <input type="text" name="edit_name" id="edit_name" class="editfield form-control">
+                            <input type="text" name="edit_name" id="edit_name" class="editfield form-control" onKeyPress="return validateAlpha(event);">
 
                             <label for="edit_email" class="label">Email</label>
                             <input type="email" name="edit_email" id="edit_email" class="editfield form-control">
 
                             <label for="edit_mobile" class="label">Mobile</label>
-                            <input type="text" name="edit_mobile" id="edit_mobile" maxlength="10" class="editfield form-control">
+                            <input type="text" name="edit_mobile" id="edit_mobile" maxlength="10" class="editfield form-control" onKeyPress="return validateNumber(event);">
 
                             <label for="edit_dob" class="label">DOB</label>
                             <input type="date" name="edit_dob" id="edit_dob" class="editfield form-control">
@@ -140,6 +140,33 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
     <script>
+   
+        $(document).ready(function() {
+            $('#name').bind('copy paste cut',function(e) { 
+                e.preventDefault();
+                alert('cut,copy & paste options are disabled !!');
+            });
+            $('#email').bind('copy paste cut',function(e) { 
+                e.preventDefault();
+                alert('cut,copy & paste options are disabled !!');
+            });
+            $('#mobile').bind('copy paste cut',function(e) { 
+                e.preventDefault();
+                alert('cut,copy & paste options are disabled !!');
+            });
+            $('#edit_name').bind('copy paste cut',function(e) { 
+                e.preventDefault();
+                alert('cut,copy & paste options are disabled !!');
+            });
+            $('#edit_email').bind('copy paste cut',function(e) { 
+                e.preventDefault();
+                alert('cut,copy & paste options are disabled !!');
+            });
+            $('#edit_mobile').bind('copy paste cut',function(e) { 
+                e.preventDefault();
+                alert('cut,copy & paste options are disabled !!');
+            });
+        });
         
         function validateAlpha(evt) {
 
@@ -158,6 +185,13 @@
         }
 
         $('input[type=email]').on('keypress', function (e) {
+            var re = /[A-Z0-9a-z@\._]/.test(e.key);
+            if (!re) {
+                return false;
+            }
+        });
+
+        $('input[type=edit_email]').on('keypress', function (e) {
             var re = /[A-Z0-9a-z@\._]/.test(e.key);
             if (!re) {
                 return false;
@@ -222,6 +256,23 @@
                     e.preventDefault();
                     return false;
                 }
+                if($("input[name='edit_name']").val()!=''){
+                    let str = $("input[name='edit_name']").val();
+                    var flag = 0;
+                    for (let i = 0; i < str.length; i++) {
+                        if (str[i] >= '0' && str[i] <= '9') {
+                            flag = 1;
+                            break;
+                        }
+                    }
+                    if(flag==1){
+                        alert("Name field doesn't contain digit");
+                        $("input[name='edit_name']").focus();
+                        e.preventDefault();
+                        return false;
+                    }
+                   
+                }
                 if($("input[name='edit_email']").val()==''){
                     alert("Email field is empty");
                     $("input[name='email']").focus();
@@ -266,7 +317,7 @@
                             $("#error").html('');
                             $("#message").html('');	
                             $("#success").html('');
-                            $("#update").html(result.message);	                             
+                            $("#update").html(result.message);	  
                             $('#tabledata').load('form/fetchAllData');
 
                         }
@@ -328,6 +379,23 @@
                     $("input[name='name']").focus();
                     e.preventDefault();
                     return false;
+                }
+                if($("input[name='name']").val()!=''){
+                    let str = $("input[name='name']").val();
+                    var flag = 0;
+                    for (let i = 0; i < str.length; i++) {
+                        if (str[i] >= '0' && str[i] <= '9') {
+                            flag = 1;
+                            break;
+                        }
+                    }
+                    if(flag==1){
+                        alert("Name field doesn't contain digit");
+                        $("input[name='name']").focus();
+                        e.preventDefault();
+                        return false;
+                    }
+                   
                 }
                 if($("input[name='email']").val()==''){
                     alert("Email field is empty");
