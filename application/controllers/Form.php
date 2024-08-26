@@ -64,7 +64,7 @@
         public function editData()
         {
 
-            // if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
+            if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
 
             $id = $this->input->post('id');
 
@@ -85,71 +85,123 @@
 
         }
 
+        public function checkEmailExists()
+        {
+            $id = $this->input->post('edit_id');
+
+            $email = $this->input->post('edit_email');
+
+            $idExists = $this->db->where('email', $email)->get('test_table')->row_array();
+
+            if($idExists){
+                if($id!=$idExists['id']){
+                    $this->form_validation->set_message('checkEmailExists', 'Email already exists.');
+                    return false;
+               }
+            }
+        }
+
+        public function checkMobileExists()
+        {
+            $id = $this->input->post('edit_id');
+
+            $mobile = $this->input->post('edit_mobile');
+
+            $idExists = $this->db->where('mobile', $mobile)->get('test_table')->row_array();
+
+            // print_r($idExists);
+            // die;
+
+            if($idExists){
+                if($id!=$idExists['id'])
+                {
+                    $this->form_validation->set_message('checkMobileExists', 'Mobile already exists.');
+                    return false;
+                }
+            }
+        }
+
         public function updateData()
         {
 
             $this->load->helper(array('form','url'));
+            $this->load->library('form_validation');
 
-            // if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
+            if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
             
-            if($this->input->method()=='post') {       
-
-                $this->form_validation->set_rules('edit_name', 'Name', 'required|trim');
-                $this->form_validation->set_rules('edit_email', 'Email', 'required|trim|is_unique[test_table.email]');
-                $this->form_validation->set_rules('edit_mobile', 'Mobile', 'required|trim|is_unique[test_table.mobile]');
-                $this->form_validation->set_rules('edit_dob', 'DOB', 'required');
-                $this->form_validation->set_rules('edit_gender', 'Gender', 'required');
-
-                $fields = ['name', 'email', 'mobile', 'dob', 'gender', 'profile'];
-
-                $data = [];
-
+            if($this->input->method()=='post') {   
+                
                 $id = $this->input->post('edit_id');
 
-                $oldData = $this->Data_model->getDataById($id);
-
-                $oldImg = $oldData['profile'];
-
-                foreach ($fields as $field){
-
-                    $data[$field] = $this->input->post('edit_'.$field);
-                    if($field == 'gender')
-                        $data[$field] = $this->input->post('edit_'.$field)=='1'?'Male':($this->input->post('edit_'.$field)=='2'?'Female':'Other');
+                $this->form_validation->set_rules('edit_name', 'Name', 'required|trim');
+                // $this->form_validation->set_rules('edit_email', 'Email', 'required|trim');
+                // $this->form_validation->set_rules('edit_mobile', 'Mobile', 'required|trim');
+                $this->form_validation->set_rules('edit_email', 'Email', 'callback_checkEmailExists');
+                $this->form_validation->set_rules('edit_mobile', 'Mobile', 'callback_checkMobileExists');
+                $this->form_validation->set_rules('edit_dob', 'DOB', 'required');
+                $this->form_validation->set_rules('edit_gender', 'Gender', 'required');
                 
+
+                if ($this->form_validation->run() == true) {
+
+                    $fields = ['name', 'email', 'mobile', 'dob', 'gender', 'profile'];
+
+                    $data = [];
+
+                    $id = $this->input->post('edit_id');
+
+                    $oldData = $this->Data_model->getDataById($id);
+
+                    $oldImg = $oldData['profile'];
+
+                    foreach ($fields as $field){
+
+                        $data[$field] = $this->input->post('edit_'.$field);
+                        if($field == 'gender')
+                            $data[$field] = $this->input->post('edit_'.$field)=='1'?'Male':($this->input->post('edit_'.$field)=='2'?'Female':'Other');
+                    
+                    }
+
+                    $config['upload_path'] = './uploads/';
+                    $config['allowed_types'] = 'gif|jpg|png';
+
+                    $this->load->library('upload',$config);	
+
+                    $this->upload->initialize($config);
+
+                    $this->upload->do_upload('edit_profile');
+
+                    $img = $this->upload->data();
+
+                    $data['profile'] = $img['file_name']; 
+
+
+                    if($img['file_name']=='')
+                        $data['profile'] = $oldImg;
+
+                    if($img['file_name']!='' && $img['file_name']!=$oldImg){
+
+                        $data['profile'] = $img['file_name'];
+                        $file = './uploads/'.$oldImg;		
+                        unlink($file);
+                    }	
+
+                    // print_r($data);
+                    // die;
+
+                    if( $this->Data_model->updateDataById($id, $data) == true ){
+                        $response = array(
+                            'status' => "success",
+                            'message' => "Data updated successfully"
+                        );  
+                    }
+
                 }
-
-                $config['upload_path'] = './uploads/';
-                $config['allowed_types'] = 'gif|jpg|png';
-
-                $this->load->library('upload',$config);	
-
-                $this->upload->initialize($config);
-
-                $this->upload->do_upload('edit_profile');
-
-                $img = $this->upload->data();
-
-                $data['profile'] = $img['file_name']; 
-
-
-                if($img['file_name']=='')
-				    $data['profile'] = $oldImg;
-
-                if($img['file_name']!='' && $img['file_name']!=$oldImg){
-
-                    $data['profile'] = $img['file_name'];
-                    $file = './uploads/'.$oldImg;		
-                    unlink($file);
-                }	
-
-                // print_r($data);
-                // die;
-
-                if( $this->Data_model->updateDataById($id, $data) == true ){
+                else{
                     $response = array(
-                        'status' => "success",
-                        'message' => "Data updated successfully"
-                    );  
+                        'status' => "editerror",
+                        'message' => validation_errors()
+                    );
                 }
                  
             }         
@@ -161,7 +213,7 @@
         public function deleteData()
         {
 
-            // if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
+            if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
 
             $id = $this->input->post('id');
 
@@ -180,6 +232,7 @@
         {
             $this->load->helper(array('form','url'));
             $this->load->library('form_validation');
+            
             if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
 
             if($this->input->method()=='post') {

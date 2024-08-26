@@ -93,9 +93,11 @@
                         <h5 class="heading modal-title text-white" id="updateModalCenterTitle">Edit & Update</h5>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="form/updateData" role="form" id="updateForm" class="updateForm" enctype="multipart/form-data">
+                            <form method="post" action="form/updateData" role="form" id="updateForm" class="updateForm" enctype="multipart/form-data">
 
                             <input type="hidden" name="edit_id" id="edit_id" value="">
+
+                            <div id="editerror" class="editerror bg-danger rounded text-white text-center"></div>
 
                             <label for="edit_name" class="label">Name</label>
                             <input type="text" name="edit_name" id="edit_name" class="editfield form-control">
@@ -122,9 +124,6 @@
                             <input type="file" name="edit_profile" id="edit_profile" accept="image/*" class="editfield form-control">
                             <img src="" id="profile_image" class="profile mt-2">
 
-                            <!-- <div class="text-center">
-                                <input type="submit" value="Submit" id="submit" class="btn btn-success">
-                            </div> -->
                             <div class="modal-footer">
                                 <button type="button" class="butn btn btn-secondary" id="update_cancel" data-dismiss="modal">Cancel</button>
                                 <input type="submit" class="butn btn btn-success" id="update" value="Update">
@@ -169,8 +168,7 @@
         $(document).ready(function () {  
 
             $('#tabledata').load('form/fetchAllData');
-
-
+            
 
 
             $(document).on("click", "button.editdata", function(){
@@ -189,6 +187,7 @@
 
                         if(result.status == 'success'){
 
+                            // $("#editerror").html('');
                             $("#error").html('');
                             $("#message").html('');	
                             $("#success").html('');
@@ -217,6 +216,38 @@
 
                 e.preventDefault();    
 
+                if($("input[name='edit_name']").val()==''){
+                    alert("Name field is empty");
+                    $("input[name='name']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("input[name='edit_email']").val()==''){
+                    alert("Email field is empty");
+                    $("input[name='email']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("input[name='edit_mobile']").val()==''){
+                    alert("Mobile field is empty");
+                    $("input[name='mobile']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("input[name='edit_dob']").val()==''){
+                    alert("DOB field is empty");
+                    $("input[name='dob']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if($("select[name='edit_gender']").val()==''){
+                    alert("Gender field is empty");
+                    $("select[name='gender']").focus();
+                    e.preventDefault();
+                    return false;
+                }
+               
+
                 $.ajax({
                     url: "form/updateData",
                     type: "POST",
@@ -230,6 +261,7 @@
                 
                         if(result.status=='success'){
 
+                            $("#editerror").html('');	
                             $('#update_cancel').trigger("click");
                             $("#error").html('');
                             $("#message").html('');	
@@ -237,6 +269,13 @@
                             $("#update").html(result.message);	                             
                             $('#tabledata').load('form/fetchAllData');
 
+                        }
+                        if(result.status=='editerror'){
+                            $("#success").html('');
+                            $("#update").html('');	
+                            $("#message").html('');	
+                            $("#error").html('');
+                            $("#editerror").html(result.message);	
                         }
                         
                     }
