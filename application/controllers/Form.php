@@ -64,7 +64,7 @@
         public function editData()
         {
 
-            if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
+            if (!$this->input->is_ajax_request()) { exit('no valid request.'); }
 
             $id = $this->input->post('id');
 
@@ -127,7 +127,7 @@
             $this->load->helper(array('form','url'));
             $this->load->library('form_validation');
 
-            if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
+            if (!$this->input->is_ajax_request()) { exit('no valid request.'); }
             
             if($this->input->method()=='post') {   
                 
@@ -213,7 +213,7 @@
         public function deleteData()
         {
 
-            if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
+            if (!$this->input->is_ajax_request()) { exit('no valid request.'); }
 
             $id = $this->input->post('id');
 
@@ -233,7 +233,7 @@
             $this->load->helper(array('form','url'));
             $this->load->library('form_validation');
             
-            if (!$this->input->is_ajax_request()) { exit('no valid req.'); }
+            if (!$this->input->is_ajax_request()) { exit('no valid request.'); }
 
             if($this->input->method()=='post') {
 
