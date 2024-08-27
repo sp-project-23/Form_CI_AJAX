@@ -5,7 +5,8 @@
         <title>Form</title>
         <link href="<?php echo base_url().'assets/css/bootstrap.min.css'; ?>" rel="stylesheet">
         <link href="<?php echo base_url().'assets/css/responsive.css'; ?>" rel="stylesheet">
-        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
         <script src="<?php echo base_url().'assets/js/ajax.popper.min.js'; ?>"></script>
         <script src="<?php echo base_url().'assets/js/jquery.min.js'; ?>"></script>
         <script src="<?php echo base_url().'assets/js/bootstrap.min.js'; ?>"></script>
@@ -18,8 +19,8 @@
                 <div class="col-lg-9">
                     <h1 class="heading bg-info rounded text-white p-2">Data Table</h1>
 
-                    <div id="message" class="message bg-danger rounded text-white text-center"></div> 
-                    <div id="update" class="update bg-success rounded text-white text-center"></div> 
+                    <div id="message" class="message bg-danger rounded text-white text-center mb-2"></div> 
+                    <div id="update" class="update bg-success rounded text-white text-center mb-2"></div> 
 
                     <div id="tabledata">
                 
@@ -223,9 +224,8 @@
                             var myTableDiv = document.getElementById("tabledata");
 
                             var table = document.createElement('TABLE');
-                            table.classList.add('table');
+                            table.classList.add('table', 'heading');
                             table.setAttribute('style', 'vertical-align: middle; text-align: center;');
-                            // table.style = 'vertical-align: middle; text-align: center;';
 
                             var tableHead = document.createElement('THEAD');
                             tableHead.classList.add('table-dark');
@@ -235,42 +235,50 @@
                             tableHead.appendChild(tr);
 
                             let td = document.createElement('TD');
-                            td.class = 'label';
+                            td.classList.add('label');
+                            td.setAttribute('scope', 'col');
                             td.appendChild(document.createTextNode("#"));
                             tr.appendChild(td);
 
                             td = document.createElement('TD');
-                            td.class = 'label';
+                            td.classList.add('label');
+                            td.setAttribute('scope', 'col');
                             td.appendChild(document.createTextNode("Name"));
                             tr.appendChild(td);
 
                             td = document.createElement('TD');
-                            td.class = 'label';
+                            td.classList.add('label');
+                            td.setAttribute('scope', 'col');
                             td.appendChild(document.createTextNode("Email"));
                             tr.appendChild(td);
 
                             td = document.createElement('TD');
-                            td.class = 'label';
+                            td.classList.add('label');
+                            td.setAttribute('scope', 'col');
                             td.appendChild(document.createTextNode("Mobile"));
                             tr.appendChild(td);
 
                             td = document.createElement('TD');
-                            td.class = 'label';
+                            td.classList.add('label');
+                            td.setAttribute('scope', 'col');
                             td.appendChild(document.createTextNode("DOB"));
                             tr.appendChild(td);
 
                             td = document.createElement('TD');
-                            td.class = 'label';
+                            td.classList.add('label');
+                            td.setAttribute('scope', 'col');
                             td.appendChild(document.createTextNode("Gender"));
                             tr.appendChild(td);
 
                             td = document.createElement('TD');
-                            td.class = 'label';
+                            td.classList.add('label');
+                            td.setAttribute('scope', 'col');
                             td.appendChild(document.createTextNode("Profile"));
                             tr.appendChild(td);
 
                             td = document.createElement('TD');
-                            td.class = 'label';
+                            td.classList.add('label');
+                            td.setAttribute('scope', 'col');
                             td.appendChild(document.createTextNode("Action"));
                             tr.appendChild(td);
                         
@@ -331,7 +339,10 @@
                                     btn1.setAttribute('type', 'button');
                                     btn1.setAttribute('data-toggle', 'modal');
                                     btn1.setAttribute('data-target', '#updateModalCenter');
-                                    btn1.appendChild(document.createTextNode('Edit'));
+                                    let edit = document.createElement('I');
+                                    edit.classList.add('fa','fa-edit');
+                                    // btn1.appendChild(document.createTextNode('Edit'));
+                                    btn1.appendChild(edit)
                                     td.appendChild(btn1);
 
                                     let btn2 = document.createElement('BUTTON');
@@ -340,8 +351,10 @@
                                     btn2.setAttribute('type', 'button');
                                     btn2.setAttribute('data-toggle', 'modal');
                                     btn2.setAttribute('data-target', '#deleteModalCenter');
-                                    btn2.appendChild(document.createTextNode('Delete'));
-
+                                    let del = document.createElement('I');
+                                    del.classList.add('fa','fa-trash-o');
+                                    btn2.appendChild(del)
+                                    // btn2.appendChild(document.createTextNode('Delete'));
                                     td.appendChild(btn2);
                                     tr.appendChild(td);
                                 }
@@ -356,7 +369,7 @@
                                 td.setAttribute('colspan', '9');
                                 td.classList.add('label');
                                 let h2 = document.createElement('H2');
-                                h2.appendChild(document.createTextNode('No Result Found'));
+                                h2.appendChild(document.createTextNode('No Data Found'));
                                 td.appendChild(h2);
                                 tr.appendChild(td);
                             }
