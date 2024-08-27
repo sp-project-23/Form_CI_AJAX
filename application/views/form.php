@@ -142,6 +142,7 @@
     <script>
    
         $(document).ready(function() {
+
             $('#name').bind('copy paste cut',function(e) { 
                 e.preventDefault();
                 alert('cut,copy & paste options are disabled !!');
@@ -166,6 +167,7 @@
                 e.preventDefault();
                 alert('cut,copy & paste options are disabled !!');
             });
+            
         });
         
         function validateAlpha(evt) {
@@ -201,8 +203,172 @@
 
         $(document).ready(function () {  
 
-            $('#tabledata').load('form/fetchAllData');
+            // $('#tabledata').load('form/fetchAllData'); 
+
+            fetchData();
             
+            function fetchData()
+            {
+                $(function(){
+                    $.ajax({
+                        type:'GET',
+                        url: 'form/fetchAllData',
+                        success: function (data){
+                            $("#tabledata").html('');
+
+                            var data = JSON.parse(data);
+
+                            var baseUrl = '<?php echo base_url(); ?>'+'uploads/';
+
+                            var myTableDiv = document.getElementById("tabledata");
+
+                            var table = document.createElement('TABLE');
+                            table.classList.add('table');
+                            table.setAttribute('style', 'vertical-align: middle; text-align: center;');
+                            // table.style = 'vertical-align: middle; text-align: center;';
+
+                            var tableHead = document.createElement('THEAD');
+                            tableHead.classList.add('table-dark');
+                            table.appendChild(tableHead);
+
+                            let tr = document.createElement('TR');
+                            tableHead.appendChild(tr);
+
+                            let td = document.createElement('TD');
+                            td.class = 'label';
+                            td.appendChild(document.createTextNode("#"));
+                            tr.appendChild(td);
+
+                            td = document.createElement('TD');
+                            td.class = 'label';
+                            td.appendChild(document.createTextNode("Name"));
+                            tr.appendChild(td);
+
+                            td = document.createElement('TD');
+                            td.class = 'label';
+                            td.appendChild(document.createTextNode("Email"));
+                            tr.appendChild(td);
+
+                            td = document.createElement('TD');
+                            td.class = 'label';
+                            td.appendChild(document.createTextNode("Mobile"));
+                            tr.appendChild(td);
+
+                            td = document.createElement('TD');
+                            td.class = 'label';
+                            td.appendChild(document.createTextNode("DOB"));
+                            tr.appendChild(td);
+
+                            td = document.createElement('TD');
+                            td.class = 'label';
+                            td.appendChild(document.createTextNode("Gender"));
+                            tr.appendChild(td);
+
+                            td = document.createElement('TD');
+                            td.class = 'label';
+                            td.appendChild(document.createTextNode("Profile"));
+                            tr.appendChild(td);
+
+                            td = document.createElement('TD');
+                            td.class = 'label';
+                            td.appendChild(document.createTextNode("Action"));
+                            tr.appendChild(td);
+                        
+
+                            var tableBody = document.createElement('TBODY');
+                            table.appendChild(tableBody);
+
+                            if(data.length>0) {
+                                // $("#tabledata").html('');
+
+                                for (var i = 0; i < data.length; i++) {
+
+                                    let tr = document.createElement('TR');
+                                    tableBody.appendChild(tr);
+
+                                    let td = document.createElement('TD');
+                                    td.classList.add("editfield");
+                                    td.appendChild(document.createTextNode(data[i]['id']));
+                                    tr.appendChild(td);
+
+                                    td = document.createElement('TD');
+                                    td.classList.add("editfield");
+                                    td.appendChild(document.createTextNode(data[i]['name']));
+                                    tr.appendChild(td);
+
+                                    td = document.createElement('TD');
+                                    td.classList.add("editfield");
+                                    td.appendChild(document.createTextNode(data[i]['email']));
+                                    tr.appendChild(td);
+
+                                    td = document.createElement('TD');
+                                    td.classList.add("editfield");
+                                    td.appendChild(document.createTextNode(data[i]['mobile']));
+                                    tr.appendChild(td);
+
+                                    td = document.createElement('TD');
+                                    td.classList.add("editfield");
+                                    td.appendChild(document.createTextNode(data[i]['dob']));
+                                    tr.appendChild(td);
+
+                                    td = document.createElement('TD');
+                                    td.classList.add("editfield");
+                                    td.appendChild(document.createTextNode(data[i]['gender']));
+                                    tr.appendChild(td);
+
+                                    td = document.createElement('TD');
+                                    let img = document.createElement('IMG');
+                                    img.classList.add("profile");
+                                    img.setAttribute('src', baseUrl+data[i]['profile']);
+                                    td.appendChild(img);
+                                    tr.appendChild(td);
+
+                                    td = document.createElement('TD');
+                                    
+                                    let btn1 = document.createElement('BUTTON');
+                                    btn1.classList.add('butn', 'btn', 'btn-success', 'editdata');
+                                    btn1.setAttribute('data-dataid', data[i]['id']);
+                                    btn1.setAttribute('type', 'button');
+                                    btn1.setAttribute('data-toggle', 'modal');
+                                    btn1.setAttribute('data-target', '#updateModalCenter');
+                                    btn1.appendChild(document.createTextNode('Edit'));
+                                    td.appendChild(btn1);
+
+                                    let btn2 = document.createElement('BUTTON');
+                                    btn2.classList.add('butn', 'btn', 'btn-danger', 'deletedata');
+                                    btn2.setAttribute('data-dataid', data[i]['id']);
+                                    btn2.setAttribute('type', 'button');
+                                    btn2.setAttribute('data-toggle', 'modal');
+                                    btn2.setAttribute('data-target', '#deleteModalCenter');
+                                    btn2.appendChild(document.createTextNode('Delete'));
+
+                                    td.appendChild(btn2);
+                                    tr.appendChild(td);
+                                }
+
+                            }
+                            else {
+                                // $("#tabledata").html('');
+                                let tr = document.createElement('TR');
+                                tableBody.appendChild(tr);
+
+                                let td = document.createElement('TD');
+                                td.setAttribute('colspan', '9');
+                                td.classList.add('label');
+                                let h2 = document.createElement('H2');
+                                h2.appendChild(document.createTextNode('No Result Found'));
+                                td.appendChild(h2);
+                                tr.appendChild(td);
+                            }
+
+
+                            myTableDiv.appendChild(table);
+                            // $('#tabledata').html(data);
+
+                        }
+                    });
+                });
+            }
 
 
             $(document).on("click", "button.editdata", function(){
@@ -317,8 +483,9 @@
                             $("#error").html('');
                             $("#message").html('');	
                             $("#success").html('');
-                            $("#update").html(result.message);	  
-                            $('#tabledata').load('form/fetchAllData');
+                            $("#update").html(result.message);	 
+                            fetchData(); 
+                            // $('#tabledata').load('form/fetchAllData');
 
                         }
                         if(result.status=='editerror'){
@@ -360,7 +527,8 @@
                             $("#update").html('');	
                             $("#success").html('');
                             $('#delete_cancel').trigger("click");
-                            $('#tabledata').load('form/fetchAllData');
+                            fetchData();
+                            // $('#tabledata').load('form/fetchAllData');
 
                         }
                     }
@@ -459,7 +627,8 @@
                             $("#update").html('');	
                             $("#message").html('');	
                             $("#success").html(result.message);	  
-                            $('#tabledata').load('form/fetchAllData');
+                            fetchData();
+                            // $('#tabledata').load('form/fetchAllData');
 
                         }
                            
