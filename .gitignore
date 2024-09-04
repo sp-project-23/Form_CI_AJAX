@@ -30,3 +30,12 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-project
 /tests/tests/
 /tests/results/
+application/config/config.php
+application/config/autoload.php
+application/config/database.php
+application/.htaccess
+/.htaccess
+/system/
+/assets/
+/uploads/
+application/config/config.php
